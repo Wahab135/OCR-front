@@ -4,28 +4,36 @@ import "./App.css";
 
 function App() {
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [responseFileNames, setResponseFileNames] = useState([]);
 
   const handleFileSelect = (event) => {
     const files = event.target.files;
-    const fileNames = Array.from(files).map((file) => file.name);
-    setSelectedFiles(fileNames);
+    setSelectedFiles(files);
   };
 
-  const sendFileNames = async () => {
+  const sendFiles = async () => {
+    const formData = new FormData();
+    for (const file of selectedFiles) {
+      formData.append("files", file);
+    }
+
     try {
-      const response = await axios.post("http://localhost:3005/process", {
-        fileNames: selectedFiles,
-      });
+      const response = await axios.post(
+        "http://localhost:3005/process",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 200) {
-        console.log("File names sent successfully");
-        setResponseFileNames(response.data.logs); // Update state with response data
+        console.log("Files sent successfully");
       } else {
-        console.error("Error sending file names");
+        console.error("Error sending files");
       }
     } catch (error) {
-      console.error("Error sending file names:", error);
+      console.error("Error sending files:", error);
     }
   };
 
@@ -35,23 +43,11 @@ function App() {
         <input
           className="form-control"
           type="file"
-          id="formFileMultiple"
           multiple
           onChange={handleFileSelect}
         />
-        <button onClick={sendFileNames}>Send File Names</button>
+        <button onClick={sendFiles}>Send Files</button>
       </div>
-      {/* Display response file names */}
-      {responseFileNames.length > 0 && (
-        <div className="input-group mb-3">
-          <h2>Response</h2>
-          <ul>
-            {responseFileNames.map((fileName, index) => (
-              <li key={index}>{fileName}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }
