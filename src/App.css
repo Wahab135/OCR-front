@@ -1,0 +1,12 @@
+.input-group {
+    max-width: 700px;
+    /* Set the maximum width */
+    margin: 0 auto;
+    /* Center the input group horizontally */
+}
+
+/* Adjust label width to fit the available space */
+.input-group-text {
+    flex: 0 0 80px;
+    /* Adjust width as needed */
+}
