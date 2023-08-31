@@ -28,6 +28,7 @@ function App() {
       );
 
       if (response.status === 200) {
+        console.log(response.data.logs);
         console.log("Files sent successfully");
       } else {
         console.error("Error sending files");
@@ -39,7 +40,7 @@ function App() {
 
   return (
     <div>
-      <div className="input-group mb-3">
+      <div className="input-group">
         <input
           className="form-control"
           type="file"
